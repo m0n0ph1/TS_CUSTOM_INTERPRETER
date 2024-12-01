@@ -6,25 +6,25 @@
 // -----------------------------------------------------------
 
 export type NodeType =
-  // STATEMENTS
-  | "Program"
-  | "VarDeclaration"
-  // EXPRESSIONS
-  | "AssignmentExpr"
-  | "MemberExpr"
-  | "CallExpr"
-  // Literals
-  | "Property"
-  | "ObjectLiteral"
-  | "NumericLiteral"
-  | "Identifier"
-  | "BinaryExpr";
+// STATEMENTS
+    | "Program"
+    | "VarDeclaration"
+    // EXPRESSIONS
+    | "AssignmentExpr"
+    | "MemberExpr"
+    | "CallExpr"
+    // Literals
+    | "Property"
+    | "ObjectLiteral"
+    | "NumericLiteral"
+    | "Identifier"
+    | "BinaryExpr";
 
 /**
  * Statements do not result in a value at runtime.
  They contain one or more expressions internally */
 export interface Stmt {
-  kind: NodeType;
+    kind: NodeType;
 }
 
 /**
@@ -32,24 +32,25 @@ export interface Stmt {
  * -  Only one program will be contained in a file.
  */
 export interface Program extends Stmt {
-  kind: "Program";
-  body: Stmt[];
+    kind: "Program";
+    body: Stmt[];
 }
 
 export interface VarDeclaration extends Stmt {
-  kind: "VarDeclaration";
-  constant: boolean;
-  identifier: string;
-  value?: Expr;
+    kind: "VarDeclaration";
+    constant: boolean;
+    identifier: string;
+    value?: Expr;
 }
 
 /**  Expressions will result in a value at runtime unlike Statements */
-export interface Expr extends Stmt {}
+export interface Expr extends Stmt {
+}
 
 export interface AssignmentExpr extends Expr {
-  kind: "AssignmentExpr";
-  assigne: Expr;
-  value: Expr;
+    kind: "AssignmentExpr";
+    assigne: Expr;
+    value: Expr;
 }
 
 /**
@@ -58,23 +59,23 @@ export interface AssignmentExpr extends Expr {
  * - Supported Operators -> + | - | / | * | %
  */
 export interface BinaryExpr extends Expr {
-  kind: "BinaryExpr";
-  left: Expr;
-  right: Expr;
-  operator: string; // needs to be of type BinaryOperator
+    kind: "BinaryExpr";
+    left: Expr;
+    right: Expr;
+    operator: string; // needs to be of type BinaryOperator
 }
 
 export interface CallExpr extends Expr {
-  kind: "CallExpr";
-  args: Expr[];
-  caller: Expr;
+    kind: "CallExpr";
+    args: Expr[];
+    caller: Expr;
 }
 
 export interface MemberExpr extends Expr {
-  kind: "MemberExpr";
-  object: Expr;
-  property: Expr;
-  computed: boolean;
+    kind: "MemberExpr";
+    object: Expr;
+    property: Expr;
+    computed: boolean;
 }
 
 // LITERAL / PRIMARY EXPRESSION TYPES
@@ -82,25 +83,25 @@ export interface MemberExpr extends Expr {
  * Represents a user-defined variable or symbol in source.
  */
 export interface Identifier extends Expr {
-  kind: "Identifier";
-  symbol: string;
+    kind: "Identifier";
+    symbol: string;
 }
 
 /**
  * Represents a numeric constant inside the soure code.
  */
 export interface NumericLiteral extends Expr {
-  kind: "NumericLiteral";
-  value: number;
+    kind: "NumericLiteral";
+    value: number;
 }
 
 export interface Property extends Expr {
-  kind: "Property";
-  key: string;
-  value?: Expr;
+    kind: "Property";
+    key: string;
+    value?: Expr;
 }
 
 export interface ObjectLiteral extends Expr {
-  kind: "ObjectLiteral";
-  properties: Property[];
+    kind: "ObjectLiteral";
+    properties: Property[];
 }
