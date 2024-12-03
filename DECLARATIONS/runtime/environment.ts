@@ -1,7 +1,7 @@
 import {RuntimeVal} from "./values.ts";
 
 export default class Environment {
-    private parent ?: Environment;
+    private readonly parent ?: Environment;
     private variables: Map<string,
         RuntimeVal>;
     private constants: Set<string>;
@@ -15,7 +15,7 @@ export default class Environment {
     public declareVar(
         varname: string,
         value: RuntimeVal,
-        constant: boolean,): RuntimeVal {
+        constant: boolean,) {
         if (this.variables.has(varname)) {
             throw `Cannot declare variable ${varname}. As it already is defined.`;
         }
@@ -27,7 +27,7 @@ export default class Environment {
         return value;
     }
 
-    public assignVar(varname: string, value: RuntimeVal): RuntimeVal {
+    public assignVar(varname: string, value: RuntimeVal) {
         const env = this.resolve(varname);
 
         // Cannot assign to constant
@@ -39,7 +39,7 @@ export default class Environment {
         return value;
     }
 
-    public lookupVar(varname: string): RuntimeVal {
+    public lookupVar(varname: string) {
         const env = this.resolve(varname);
         return env.variables.get(varname) as RuntimeVal;
     }
@@ -49,7 +49,7 @@ export default class Environment {
             return this;
         }
 
-        if (this.parent == undefined) {
+        if (this.parent === undefined) {
             throw `Cannot resolve '${varname}' as it does not exist.`;
         }
 

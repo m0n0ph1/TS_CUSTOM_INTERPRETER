@@ -1,4 +1,4 @@
-@    data:
+"@"    "data":
 {
 operationName: "add",
 parameters: ["a", "b"],

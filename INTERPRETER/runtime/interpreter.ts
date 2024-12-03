@@ -1,7 +1,7 @@
 import {NullVal, NumberVal, RuntimeVal} from "./values.ts";
 import {BinaryExpr, NumericLiteral, Program, Stmt} from "../frontend/ast.ts";
 
-function eval_program(program: Program): RuntimeVal {
+function eval_program(program: Program) {
     let lastEvaluated: RuntimeVal = {type: "null", value: "null"} as NullVal;
     for (const statement of program.body) {
         lastEvaluated = evaluate(statement);
@@ -18,13 +18,13 @@ function eval_numeric_binary_expr(
     operator: string,
 ): NumberVal {
     let result: number;
-    if (operator == "+") {
+    if (operator === "+") {
         result = lhs.value + rhs.value;
-    } else if (operator == "-") {
+    } else if (operator === "-") {
         result = lhs.value - rhs.value;
-    } else if (operator == "*") {
+    } else if (operator === "*") {
         result = lhs.value * rhs.value;
-    } else if (operator == "/") {
+    } else if (operator === "/") {
         // TODO: Division by zero checks
         result = lhs.value / rhs.value;
     } else {
@@ -42,7 +42,7 @@ function eval_binary_expr(binop: BinaryExpr): RuntimeVal {
     const rhs = evaluate(binop.right);
 
     // Only currently support numeric operations
-    if (lhs.type == "number" && rhs.type == "number") {
+    if (lhs.type === "number" && rhs.type === "number") {
         return eval_numeric_binary_expr(
             lhs as NumberVal,
             rhs as NumberVal,

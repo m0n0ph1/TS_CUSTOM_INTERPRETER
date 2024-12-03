@@ -1,23 +1,24 @@
-// deno-lint-ignore-file no-explicit-any
-import {BinaryExpr, Expr, Identifier, NumericLiteral, Program, Stmt,} from "./ast.ts";
+// parser.ts
 
+import {BinaryExpr, Expr, Identifier, NumericLiteral, Program, Stmt,} from "./ast.ts";
 import {Token, tokenize, TokenType} from "./lexer.ts";
 
-/**
- * Frontend for producing a valid AST from sourcode
- */
-export default class Parser {
+export default class Parser
+{
     private tokens: Token[] = [];
 
-    public produceAST(sourceCode: string): Program {
+    public produceAST(sourceCode: string) {
         this.tokens = tokenize(sourceCode);
-        const program: Program = {
+
+        const program: Program =
+            {
             kind: "Program",
             body: [],
         };
 
         // Parse until end of file
-        while (this.not_eof()) {
+        while (this.not_eof())
+        {
             program.body.push(this.parse_stmt());
         }
 
@@ -27,21 +28,23 @@ export default class Parser {
     /*
      * Determines if the parsing is complete and the END OF FILE Is reached.
      */
-    private not_eof(): boolean {
-        return this.tokens[0].type != TokenType.EOF;
+    private not_eof() {
+        return this.tokens[0].type !== TokenType.EOF;
     }
 
     /**
      * Returns the currently available token
      */
-    private at() {
+    private at()
+    {
         return this.tokens[0] as Token;
     }
 
     /**
      * Returns the previous token and then advances the tokens array to the next value.
      */
-    private eat() {
+    private eat()
+    {
         const prev = this.tokens.shift() as Token;
         return prev;
     }
@@ -50,9 +53,12 @@ export default class Parser {
      * Returns the previous token and then advances the tokens array to the next value.
      *  Also checks the type of expected token and throws if the values dnot match.
      */
-    private expect(type: TokenType, err: any) {
+    private expect(type: TokenType, err: any)
+    {
         const prev = this.tokens.shift() as Token;
-        if (!prev || prev.type != type) {
+
+        if (!prev || prev.type !== type)
+        {
             console.error("Parser Error:\n", err, prev, " - Expecting: ", type);
             Deno.exit(1);
         }
@@ -61,24 +67,28 @@ export default class Parser {
     }
 
     // Handle complex statement types
-    private parse_stmt(): Stmt {
+    private parse_stmt(): Stmt
+    {
         // skip to parse_expr
         return this.parse_expr();
     }
 
     // Handle expressions
-    private parse_expr(): Expr {
+    private parse_expr() {
         return this.parse_additive_expr();
     }
 
     // Handle Addition & Subtraction Operations
-    private parse_additive_expr(): Expr {
+    private parse_additive_expr() {
         let left = this.parse_multiplicitave_expr();
 
-        while (this.at().value == "+" || this.at().value == "-") {
+        while (this.at().value === "+" || this.at().value === "-")
+        {
             const operator = this.eat().value;
             const right = this.parse_multiplicitave_expr();
-            left = {
+
+            left =
+                {
                 kind: "BinaryExpr",
                 left,
                 right,
@@ -90,22 +100,25 @@ export default class Parser {
     }
 
     // Handle Multiplication, Division & Modulo Operations
-    private parse_multiplicitave_expr(): Expr {
+    private parse_multiplicitave_expr() {
         let left = this.parse_primary_expr();
 
-        while (
-            this.at().value == "/" || this.at().value == "*" || this.at().value == "%"
-            ) {
+        while
+        (
+                this.at().value === "/" || this.at().value === "*" || this.at().value === "%"
+        )
+        {
             const operator = this.eat().value;
             const right = this.parse_primary_expr();
-            left = {
+
+            left =
+                {
                 kind: "BinaryExpr",
                 left,
                 right,
                 operator,
             } as BinaryExpr;
         }
-
         return left;
     }
 
@@ -115,11 +128,13 @@ export default class Parser {
     // PrimaryExpr
 
     // Parse Literal Values & Grouping Expressions
-    private parse_primary_expr(): Expr {
+    private parse_primary_expr(): Expr
+    {
         const tk = this.at().type;
 
         // Determine which token we are currently at and return literal value
-        switch (tk) {
+        switch (tk)
+        {
             // User defined values.
             case TokenType.Identifier:
                 return {kind: "Identifier", symbol: this.eat().value} as Identifier;
@@ -132,13 +147,18 @@ export default class Parser {
                 } as NumericLiteral;
 
             // Grouping Expressions
-            case TokenType.OpenParen: {
+            case TokenType.OpenParen:
+            {
                 this.eat(); // eat the opening paren
+
                 const value = this.parse_expr();
-                this.expect(
+
+                this.expect
+                (
                     TokenType.CloseParen,
                     "Unexpected token found inside parenthesised expression. Expected closing parenthesis.",
                 ); // closing paren
+
                 return value;
             }
 

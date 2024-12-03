@@ -1,5 +1,3 @@
-// deno-lint-ignore-file no-empty-interface
-// https://github.com/tlaceby/guide-to-interpreters-series
 // -----------------------------------------------------------
 // --------------          AST TYPES        ------------------
 // ---     Defines the structure of our languages AST      ---
@@ -21,7 +19,8 @@ export type NodeType =
 /**
  * Statements do not result in a value at runtime.
  They contain one or more expressions internally */
-export interface Stmt {
+export interface Stmt
+{
     kind: NodeType;
 }
 
@@ -29,12 +28,14 @@ export interface Stmt {
  * Defines a block which contains many statements.
  * -  Only one program will be contained in a file.
  */
-export interface Program extends Stmt {
+export interface Program extends Stmt
+{
     kind: "Program";
     body: Stmt[];
 }
 
-export interface VarDeclaration extends Stmt {
+export interface VarDeclaration extends Stmt
+{
     kind: "VarDeclaration";
     constant: boolean;
     identifier: string;
@@ -42,7 +43,8 @@ export interface VarDeclaration extends Stmt {
 }
 
 /**  Expressions will result in a value at runtime unlike Statements */
-export interface Expr extends Stmt {
+export interface Expr extends Stmt
+{
 }
 
 export interface AssignmentExpr extends Expr {

@@ -1,34 +1,54 @@
-import Parser from "./frontend/parser.ts";
-import Environment from "./runtime/environment.ts";
-import {evaluate} from "./runtime/interpreter.ts";
-import {MK_BOOL, MK_NULL} from "./runtime/values.ts";
+import Parser               from "./frontend/parser.ts";
+import Environment          from "./runtime/environment.ts";
+import { evaluate }         from "./runtime/interpreter.ts";
+import { MK_BOOL, MK_NULL } from "./runtime/values.ts";
 
-repl();
-
-function repl() {
+// Main REPL Function
+function repl()
+{
+    // Initialize the parser and environment
     const parser = new Parser();
     const env = new Environment();
 
-    // Create Default Global Enviornment
-    env.declareVar("true", MK_BOOL(true), true);
-    env.declareVar("false", MK_BOOL(false), true);
-    env.declareVar("null", MK_NULL(), true);
+    // Declare global constants in the environment
+    env.declareVar("true", MK_BOOL(true), true);   // Boolean true
+    env.declareVar("false", MK_BOOL(false), true); // Boolean false
+    env.declareVar("null", MK_NULL(), true);       // Null value
 
-    // INITIALIZE REPL
+    // Start REPL prompt
     console.log("\nRepl v0.1");
 
-    // Continue Repl Until User Stops Or Types `exit`
-    while (true) {
+    // Infinite loop for REPL
+    while (true)
+    {
+        // Get user input
         const input = prompt("> ");
-        // Check for no user input or exit keyword.
-        if (!input || input.includes("exit")) {
-            Deno.exit(1);
+
+        // Exit condition: No input or 'exit' keyword
+        if (!input || input.includes("exit"))
+        {
+            console.log("Exiting REPL. Goodbye!");
+            Deno.exit(0); // Exit gracefully with status code 0
         }
 
-        // Produce AST From sourc-code
-        const program = parser.produceAST(input);
+        try
+        {
+            // Parse input into an AST (Abstract Syntax Tree)
+            const program = parser.produceAST(input);
 
-        const result = evaluate(program, env);
-        console.log(result);
+            // Evaluate the program in the current environment
+            const result = evaluate(program, env);
+
+            // Output the result of evaluation
+            console.log(result);
+        }
+        catch (error)
+        {
+            // Handle any runtime or syntax errors
+            console.error("Error:", error.message);
+        }
     }
 }
+
+// Start the REPL
+repl();

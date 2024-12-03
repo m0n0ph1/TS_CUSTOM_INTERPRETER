@@ -1,11 +1,11 @@
-// https://github.com/tlaceby/guide-to-interpreters-series
 // -----------------------------------------------------------
 // ---------------          LEXER          -------------------
 // ---  Responsible for producing tokens from the source   ---
 // -----------------------------------------------------------
 
 // Represents tokens that our language understands in parsing.
-export enum TokenType {
+export enum TokenType
+{
     // Literal Types
     Number,
     Identifier,
@@ -24,42 +24,48 @@ export enum TokenType {
 /**
  * Constant lookup for keywords and known identifiers + symbols.
  */
-const KEYWORDS: Record<string, TokenType> = {
+const KEYWORDS: Record<string, TokenType> =
+    {
     let: TokenType.Let,
 };
 
 // Reoresents a single token from the source-code.
-export interface Token {
-    value: string; // contains the raw value as seen inside the source code.
-    type: TokenType; // tagged structure.
+export interface Token
+{
+    value   : string;       // contains the raw value as seen inside the source code.
+    type    : TokenType;    // tagged structure.
 }
 
 // Returns a token of a given type and value
-function token(value = "", type: TokenType): Token {
+function token(value = "", type: TokenType): Token
+{
     return {value, type};
 }
 
 /**
  * Returns whether the character passed in alphabetic -> [a-zA-Z]
  */
-function isalpha(src: string) {
-    return src.toUpperCase() != src.toLowerCase();
+function isalpha(src: string)
+{
+    return src.toUpperCase() !== src.toLowerCase();
 }
 
 /**
  * Returns true if the character is whitespace like -> [\s, \t, \n]
  */
-function isskippable(str: string) {
-    return str == " " || str == "\n" || str == "\t";
+function isskippable(str: string)
+{
+    return str === " " || str === "\n" || str === "\t";
 }
 
 /**
  Return whether the character is a valid integer -> [0-9]
  */
-function isint(str: string) {
-    const c = str.charCodeAt(0);
-    const bounds = ["0".charCodeAt(0), "9".charCodeAt(0)];
-    return c >= bounds[0] && c <= bounds[1];
+function isint(str: string)
+{
+    const c         = str.charCodeAt(0);
+    const bounds    = ["0".charCodeAt(0), "9".charCodeAt(0)];
+    return c       >= bounds[0] && c <= bounds[1];
 }
 
 /**
@@ -69,41 +75,58 @@ function isint(str: string) {
  * - Returns a array of tokens.
  * - Does not modify the incoming string.
  */
-export function tokenize(sourceCode: string): Token[] {
+export function tokenize(sourceCode: string): Token[]
+{
     const tokens = new Array<Token>();
     const src = sourceCode.split("");
 
     // produce tokens until the EOF is reached.
-    while (src.length > 0) {
+    while (src.length > 0)
+    {
         // BEGIN PARSING ONE CHARACTER TOKENS
-        if (src[0] == "(") {
+        if (src[0] === "(")
+        {
             tokens.push(token(src.shift(), TokenType.OpenParen));
-        } else if (src[0] == ")") {
+        }
+        else if (src[0] === ")")
+        {
             tokens.push(token(src.shift(), TokenType.CloseParen));
-        } // HANDLE BINARY OPERATORS
-        else if (
-            src[0] == "+" || src[0] == "-" || src[0] == "*" || src[0] == "/" ||
-            src[0] == "%"
-        ) {
+        }
+        // HANDLE BINARY OPERATORS
+        else if
+        (
+            src[0] === "+" || src[0] === "-" || src[0] === "*" || src[0] === "/" ||
+            src[0] === "%"
+        )
+        {
             tokens.push(token(src.shift(), TokenType.BinaryOperator));
-        } // Handle Conditional & Assignment Tokens
-        else if (src[0] == "=") {
+        }
+        // Handle Conditional & Assignment Tokens
+        else if (src[0] === "=") {
             tokens.push(token(src.shift(), TokenType.Equals));
-        } // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
-        else {
+        }
+        // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
+        else
+        {
             // Handle numeric literals -> Integers
-            if (isint(src[0])) {
+            if (isint(src[0]))
+            {
                 let num = "";
-                while (src.length > 0 && isint(src[0])) {
+
+                while (src.length > 0 && isint(src[0]))
+                {
                     num += src.shift();
                 }
 
                 // append new numeric token.
                 tokens.push(token(num, TokenType.Number));
-            } // Handle Identifier & Keyword Tokens.
-            else if (isalpha(src[0])) {
+            }
+            // Handle Identifier & Keyword Tokens.
+            else if (isalpha(src[0]))
+            {
                 let ident = "";
-                while (src.length > 0 && isalpha(src[0])) {
+                while (src.length > 0 && isalpha(src[0]))
+                {
                     ident += src.shift();
                 }
 

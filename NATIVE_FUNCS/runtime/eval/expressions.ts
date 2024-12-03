@@ -9,13 +9,13 @@ function eval_numeric_binary_expr(
     operator: string
 ): NumberVal {
     let result: number;
-    if (operator == "+") {
+    if (operator === "+") {
         result = lhs.value + rhs.value;
-    } else if (operator == "-") {
+    } else if (operator === "-") {
         result = lhs.value - rhs.value;
-    } else if (operator == "*") {
+    } else if (operator === "*") {
         result = lhs.value * rhs.value;
-    } else if (operator == "/") {
+    } else if (operator === "/") {
         // TODO: Division by zero checks
         result = lhs.value / rhs.value;
     } else {
@@ -36,7 +36,7 @@ export function eval_binary_expr(
     const rhs = evaluate(binop.right, env);
 
     // Only currently support numeric operations
-    if (lhs.type == "number" && rhs.type == "number") {
+    if (lhs.type === "number" && rhs.type === "number") {
         return eval_numeric_binary_expr(
             lhs as NumberVal,
             rhs as NumberVal,
@@ -51,7 +51,7 @@ export function eval_binary_expr(
 export function eval_identifier(
     ident: Identifier,
     env: Environment
-): RuntimeVal {
+) {
     const val = env.lookupVar(ident.symbol);
     return val;
 }
@@ -59,7 +59,7 @@ export function eval_identifier(
 export function eval_assignment(
     node: AssignmentExpr,
     env: Environment
-): RuntimeVal {
+) {
     if (node.assigne.kind !== "Identifier") {
         throw `Invalid LHS inaide assignment expr ${JSON.stringify(node.assigne)}`;
     }
@@ -75,7 +75,7 @@ export function eval_object_expr(
     const object = {type: "object", properties: new Map()} as ObjectVal;
     for (const {key, value} of obj.properties) {
         const runtimeVal =
-            value == undefined ? env.lookupVar(key) : evaluate(value, env);
+            value === undefined ? env.lookupVar(key) : evaluate(value, env);
 
         object.properties.set(key, runtimeVal);
     }
@@ -83,7 +83,7 @@ export function eval_object_expr(
     return object;
 }
 
-export function eval_call_expr(expr: CallExpr, env: Environment): RuntimeVal {
+export function eval_call_expr(expr: CallExpr, env: Environment) {
     const args = expr.args.map((arg) => evaluate(arg, env));
     const fn = evaluate(expr.caller, env);
 

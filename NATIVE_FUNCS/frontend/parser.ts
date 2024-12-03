@@ -22,7 +22,7 @@ import {Token, tokenize, TokenType} from "./lexer.ts";
 export default class Parser {
     private tokens: Token[] = [];
 
-    public produceAST(sourceCode: string): Program {
+    public produceAST(sourceCode: string) {
         this.tokens = tokenize(sourceCode);
         const program: Program = {
             kind: "Program",
@@ -39,13 +39,13 @@ export default class Parser {
 
     // ( LET | CONST ) IDENT = EXPR;
     parse_var_declaration(): Stmt {
-        const isConstant = this.eat().type == TokenType.Const;
+        const isConstant = this.eat().type === TokenType.Const;
         const identifier = this.expect(
             TokenType.Identifier,
             "Expected identifier name following let | const keywords.",
         ).value;
 
-        if (this.at().type == TokenType.Semicolon) {
+        if (this.at().type === TokenType.Semicolon) {
             this.eat(); // expect semicolon
             if (isConstant) {
                 throw "Must assigne value to constant expression. No value provided.";
@@ -81,8 +81,8 @@ export default class Parser {
     /*
      * Determines if the parsing is complete and the END OF FILE Is reached.
      */
-    private not_eof(): boolean {
-        return this.tokens[0].type != TokenType.EOF;
+    private not_eof() {
+        return this.tokens[0].type !== TokenType.EOF;
     }
 
     /**
@@ -106,7 +106,7 @@ export default class Parser {
      */
     private expect(type: TokenType, err: any) {
         const prev = this.tokens.shift() as Token;
-        if (!prev || prev.type != type) {
+        if (!prev || prev.type !== type) {
             console.error("Parser Error:\n", err, prev, " - Expecting: ", type);
             Deno.exit(1);
         }
@@ -129,14 +129,14 @@ export default class Parser {
     }
 
     // Handle expressions
-    private parse_expr(): Expr {
+    private parse_expr() {
         return this.parse_assignment_expr();
     }
 
     private parse_assignment_expr(): Expr {
         const left = this.parse_object_expr();
 
-        if (this.at().type == TokenType.Equals) {
+        if (this.at().type === TokenType.Equals) {
             this.eat(); // advance past equals
             const value = this.parse_assignment_expr();
             return {value, assigne: left, kind: "AssignmentExpr"} as AssignmentExpr;
@@ -154,17 +154,17 @@ export default class Parser {
         this.eat(); // advance past open brace.
         const properties = new Array<Property>();
 
-        while (this.not_eof() && this.at().type != TokenType.CloseBrace) {
+        while (this.not_eof() && this.at().type !== TokenType.CloseBrace) {
             const key =
                 this.expect(TokenType.Identifier, "Object literal key exprected").value;
 
             // Allows shorthand key: pair -> { key, }
-            if (this.at().type == TokenType.Comma) {
+            if (this.at().type === TokenType.Comma) {
                 this.eat(); // advance past comma
                 properties.push({key, kind: "Property"} as Property);
                 continue;
             } // Allows shorthand key: pair -> { key }
-            else if (this.at().type == TokenType.CloseBrace) {
+            else if (this.at().type === TokenType.CloseBrace) {
                 properties.push({key, kind: "Property"});
                 continue;
             }
@@ -177,7 +177,7 @@ export default class Parser {
             const value = this.parse_expr();
 
             properties.push({kind: "Property", value, key});
-            if (this.at().type != TokenType.CloseBrace) {
+            if (this.at().type !== TokenType.CloseBrace) {
                 this.expect(
                     TokenType.Comma,
                     "Expected comma or closing bracket following property",
@@ -190,10 +190,10 @@ export default class Parser {
     }
 
     // Handle Addition & Subtraction Operations
-    private parse_additive_expr(): Expr {
+    private parse_additive_expr() {
         let left = this.parse_multiplicitave_expr();
 
-        while (this.at().value == "+" || this.at().value == "-") {
+        while (this.at().value === "+" || this.at().value === "-") {
             const operator = this.eat().value;
             const right = this.parse_multiplicitave_expr();
             left = {
@@ -208,11 +208,11 @@ export default class Parser {
     }
 
     // Handle Multiplication, Division & Modulo Operations
-    private parse_multiplicitave_expr(): Expr {
+    private parse_multiplicitave_expr() {
         let left = this.parse_call_member_expr();
 
         while (
-            this.at().value == "/" || this.at().value == "*" || this.at().value == "%"
+            this.at().value === "/" || this.at().value === "*" || this.at().value === "%"
             ) {
             const operator = this.eat().value;
             const right = this.parse_call_member_expr();
@@ -228,33 +228,33 @@ export default class Parser {
     }
 
     // foo.x()()
-    private parse_call_member_expr(): Expr {
+    private parse_call_member_expr() {
         const member = this.parse_member_expr();
 
-        if (this.at().type == TokenType.OpenParen) {
+        if (this.at().type === TokenType.OpenParen) {
             return this.parse_call_expr(member);
         }
 
         return member;
     }
 
-    private parse_call_expr(caller: Expr): Expr {
+    private parse_call_expr(caller: Expr) {
         let call_expr: Expr = {
             kind: "CallExpr",
             caller,
             args: this.parse_args(),
         } as CallExpr;
 
-        if (this.at().type == TokenType.OpenParen) {
+        if (this.at().type === TokenType.OpenParen) {
             call_expr = this.parse_call_expr(call_expr);
         }
 
         return call_expr;
     }
 
-    private parse_args(): Expr[] {
+    private parse_args() {
         this.expect(TokenType.OpenParen, "Expected open parenthesis");
-        const args = this.at().type == TokenType.CloseParen
+        const args = this.at().type === TokenType.CloseParen
             ? []
             : this.parse_arguments_list();
 
@@ -265,32 +265,32 @@ export default class Parser {
         return args;
     }
 
-    private parse_arguments_list(): Expr[] {
+    private parse_arguments_list() {
         const args = [this.parse_assignment_expr()];
 
-        while (this.at().type == TokenType.Comma && this.eat()) {
+        while (this.at().type === TokenType.Comma && this.eat()) {
             args.push(this.parse_assignment_expr());
         }
 
         return args;
     }
 
-    private parse_member_expr(): Expr {
+    private parse_member_expr() {
         let object = this.parse_primary_expr();
 
         while (
-            this.at().type == TokenType.Dot || this.at().type == TokenType.OpenBracket
+            this.at().type === TokenType.Dot || this.at().type === TokenType.OpenBracket
             ) {
             const operator = this.eat();
             let property: Expr;
             let computed: boolean;
 
             // non-computed values aka obj.expr
-            if (operator.type == TokenType.Dot) {
+            if (operator.type === TokenType.Dot) {
                 computed = false;
                 // get identifier
                 property = this.parse_primary_expr();
-                if (property.kind != "Identifier") {
+                if (property.kind !== "Identifier") {
                     throw `Cannonot use dot operator without right hand side being a identifier`;
                 }
             } else { // this allows obj[computedValue]

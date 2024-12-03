@@ -54,14 +54,14 @@ function token(value = "", type: TokenType): Token {
  * Returns whether the character passed in alphabetic -> [a-zA-Z]
  */
 function isalpha(src: string) {
-    return src.toUpperCase() != src.toLowerCase();
+    return src.toUpperCase() !== src.toLowerCase();
 }
 
 /**
  * Returns true if the character is whitespace like -> [\s, \t, \n]
  */
 function isskippable(str: string) {
-    return str == " " || str == "\n" || str == "\t" || str == "\r";
+    return str === " " || str === "\n" || str === "\t" || str === "\r";
 }
 
 /**
@@ -87,37 +87,37 @@ export function tokenize(sourceCode: string): Token[] {
     // produce tokens until the EOF is reached.
     while (src.length > 0) {
         // BEGIN PARSING ONE CHARACTER TOKENS
-        if (src[0] == "(") {
+        if (src[0] === "(") {
             tokens.push(token(src.shift(), TokenType.OpenParen));
-        } else if (src[0] == ")") {
+        } else if (src[0] === ")") {
             tokens.push(token(src.shift(), TokenType.CloseParen));
-        } else if (src[0] == "{") {
+        } else if (src[0] === "{") {
             tokens.push(token(src.shift(), TokenType.OpenBrace));
-        } else if (src[0] == "}") {
+        } else if (src[0] === "}") {
             tokens.push(token(src.shift(), TokenType.CloseBrace));
-        } else if (src[0] == "[") {
+        } else if (src[0] === "[") {
             tokens.push(token(src.shift(), TokenType.OpenBracket));
-        } else if (src[0] == "]") {
+        } else if (src[0] === "]") {
             tokens.push(token(src.shift(), TokenType.CloseBracket));
         } // HANDLE BINARY OPERATORS
         else if (
-            src[0] == "+" ||
-            src[0] == "-" ||
-            src[0] == "*" ||
-            src[0] == "/" ||
-            src[0] == "%"
+            src[0] === "+" ||
+            src[0] === "-" ||
+            src[0] === "*" ||
+            src[0] === "/" ||
+            src[0] === "%"
         ) {
             tokens.push(token(src.shift(), TokenType.BinaryOperator));
         } // Handle Conditional & Assignment Tokens
-        else if (src[0] == "=") {
+        else if (src[0] === "=") {
             tokens.push(token(src.shift(), TokenType.Equals));
-        } else if (src[0] == ";") {
+        } else if (src[0] === ";") {
             tokens.push(token(src.shift(), TokenType.Semicolon));
-        } else if (src[0] == ":") {
+        } else if (src[0] === ":") {
             tokens.push(token(src.shift(), TokenType.Colon));
-        } else if (src[0] == ",") {
+        } else if (src[0] === ",") {
             tokens.push(token(src.shift(), TokenType.Comma));
-        } else if (src[0] == ".") {
+        } else if (src[0] === ".") {
             tokens.push(token(src.shift(), TokenType.Dot));
         } // HANDLE MULTICHARACTER KEYWORDS, TOKENS, IDENTIFIERS ETC...
         else {

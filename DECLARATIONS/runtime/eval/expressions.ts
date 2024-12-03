@@ -8,13 +8,13 @@ function eval_numeric_binary_expr(
     rhs: NumberVal,
     operator: string,): NumberVal {
     let result: number;
-    if (operator == "+") {
+    if (operator === "+") {
         result = lhs.value + rhs.value;
-    } else if (operator == "-") {
+    } else if (operator === "-") {
         result = lhs.value - rhs.value;
-    } else if (operator == "*") {
+    } else if (operator === "*") {
         result = lhs.value * rhs.value;
-    } else if (operator == "/") {
+    } else if (operator === "/") {
         // TODO: Division by zero checks
         result = lhs.value / rhs.value;
     } else {
@@ -37,7 +37,7 @@ export function eval_binary_expr(
     const rhs = evaluate(binop.right, env);
 
     // Only currently support numeric operations
-    if (lhs.type == "number" && rhs.type == "number") {
+    if (lhs.type === "number" && rhs.type === "number") {
         return eval_numeric_binary_expr(
             lhs as NumberVal,
             rhs as NumberVal,
@@ -50,7 +50,7 @@ export function eval_binary_expr(
 
 export function eval_identifier(
     ident: Identifier,
-    env: Environment,): RuntimeVal {
+    env: Environment,) {
     const val = env.lookupVar(ident.symbol);
     return val;
 }

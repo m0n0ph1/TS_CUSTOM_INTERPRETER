@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="TypeScriptCompiler">
+    <option name="nodeInterpreterTextField" value="$PROJECT_DIR$/../../bin/nodejs/node-v23.2.0-win-x64/node" />
+    <option name="typeScriptServiceDirectory" value="$PROJECT_DIR$/../../bin/nodejs/node-v23.2.0-win-x64/node_modules/typescript" />
+    <option name="versionType" value="SERVICE_DIRECTORY" />
+  </component>
+</project>
