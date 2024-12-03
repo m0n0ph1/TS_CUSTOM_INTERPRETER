@@ -1,0 +1,20 @@
+@    data:
+{
+operationName: "add",
+parameters: ["a", "b"],
+body: "@return a + b;"
+}
+@code: {
+defineOperation:
+{
+input: [@data.operationName, @data.parameters, @data.body],
+operation: createFunction,
+output: @code.defineOperation.result
+},
+executeOperation: {
+input: @code.defineOperation.result,
+parameters: [5, 3],
+output: @code.executeOperation.result
+}
+}
+result: @code.executeOperation.result

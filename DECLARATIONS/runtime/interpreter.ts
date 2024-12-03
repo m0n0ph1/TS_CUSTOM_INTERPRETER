@@ -10,7 +10,9 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
             return {
                 value: ((astNode as NumericLiteral).value),
                 type: "number",
-            } as NumberVal;
+            }
+            as
+            NumberVal;
         case "Identifier":
             return eval_identifier(astNode as Identifier, env);
         case "BinaryExpr":
@@ -24,8 +26,7 @@ export function evaluate(astNode: Stmt, env: Environment): RuntimeVal {
         default:
             console.error(
                 "This AST Node has not yet been setup for interpretation.",
-                astNode,
-            );
+                astNode,);
             Deno.exit(0);
     }
 }

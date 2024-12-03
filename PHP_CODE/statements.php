@@ -1,10 +1,10 @@
 <?php
 // statements.php
     
-    require_once '../../frontend/ast.php';
-    require_once '../environment.php';
-    require_once '../interpreter.php';
-    require_once '../values.php';
+    require_once 'ast.php';
+    require_once 'environment.php';
+    require_once 'interpreter.php';
+    require_once 'values.php';
     
     function eval_program($program, $env)
     {

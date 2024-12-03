@@ -1,0 +1,17 @@
+@data:
+{
+counter: 0
+}
+@events: {
+onCounterChange:
+{
+condition: @data.counter >= 10,
+action: @code.alertUser
+}
+}
+@code: {
+alertUser: {
+operation: execute,
+definition: "alert('Counter has reached 10!')"
+}
+}

@@ -1,0 +1,25 @@
+{
+    "@compatmode": {
+        "PLC": [
+            "Step7"
+        ]
+    },
+    "@code": {
+        "temperature_check": {
+            "condition": {
+                "type": "condition",
+                "left": "@data.sensor.temp",
+                "operator": ">",
+                "right": "70"
+            },
+            "action": {
+                "type": "function_call",
+                "function": "set_output",
+                "arguments": [
+                    "COOLING",
+                    "ON"
+                ]
+            }
+        }
+    }
+}

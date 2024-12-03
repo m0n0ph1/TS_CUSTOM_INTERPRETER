@@ -1,8 +1,8 @@
 <?php
 // parser.php
     
-    require_once './ast.php';
-    require_once './lexer.php';
+    require_once 'ast.php';
+    require_once 'lexer.php';
     
     class Parser
     {

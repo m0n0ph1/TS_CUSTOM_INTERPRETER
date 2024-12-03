@@ -1,7 +1,6 @@
 <?php
 
-// lexer.php
-    
+	// lexer.php\
     class TokenType
     {
         // Literal Types
@@ -28,42 +27,30 @@
         const CLOSE_BRACKET   = 'CloseBracket';
         const EOF             = 'EOF';
     }
-    
-    /**
-     * Constant lookup for keywords and known identifiers + symbols.
-     */
-    $KEYWORDS = [
-            'let'   => TokenType::LET,
-            'const' => TokenType::CONST,
-            'fn'    => TokenType::FN,
+
+    $KEYWORDS = 
+	[
+		'let'   => TokenType::LET,
+		'const' => TokenType::CONST,
+		'fn'    => TokenType::FN,
     ];
 
-// Represents a single token from the source code.
     class Token
     {
-        public $value; // contains the raw value as seen inside the source code.
-        public $type;  // TokenType
-        
-        public function __construct($value = "", $type)
+        public $value;
+        public $type; 
+        public function __construct($value, $type)
         {
             $this->value = $value;
             $this->type  = $type;
         }
     }
 
-// Returns a token of a given type and value
     function create_token($value, $type)
     {
         return new Token($value, $type);
     }
-    
-    /**
-     * Given a string representing source code: Produce tokens and handle
-     * possible unidentified characters.
-     *
-     * - Returns an array of tokens.
-     * - Does not modify the incoming string.
-     */
+
     function tokenize($sourceCode)
     {
         global $KEYWORDS;
@@ -71,12 +58,11 @@
         $src    = str_split($sourceCode);
         $length = count($src);
         $i      = 0;
-        
-        // Produce tokens until the EOF is reached.
+
         while ($i < $length)
         {
             $char = $src[$i];
-            // BEGIN PARSING ONE CHARACTER TOKENS
+
             if ($char == '(')
             {
                 $tokens[] = create_token($char, TokenType::OPEN_PAREN);
@@ -139,7 +125,6 @@
             }
             elseif (ctype_digit($char))
             {
-                // Handle numeric literals -> Integers
                 $num = '';
                 while ($i < $length && ctype_digit($src[$i]))
                 {
@@ -150,14 +135,12 @@
             }
             elseif (ctype_alpha($char))
             {
-                // Handle identifiers and keywords
                 $ident = '';
                 while ($i < $length && (ctype_alnum($src[$i]) || $src[$i] == '_'))
                 {
                     $ident .= $src[$i];
                     $i++;
                 }
-                // CHECK FOR RESERVED KEYWORDS
                 if (isset($KEYWORDS[$ident]))
                 {
                     $tokens[] = create_token($ident, $KEYWORDS[$ident]);
@@ -169,7 +152,6 @@
             }
             elseif (ctype_space($char))
             {
-                // Skip whitespace
                 $i++;
             }
             else
@@ -177,6 +159,8 @@
                 throw new Exception("Unrecognized character found in source: " . $char);
             }
         }
+		
         $tokens[] = create_token('EndOfFile', TokenType::EOF);
+		
         return $tokens;
     }

@@ -1,0 +1,19 @@
+@data:
+{
+numbers: [1, 5, 10, 20, 30]
+}
+@code: {
+map: {
+input: @data.numbers,
+operation: multiply,
+by: 2,
+output: @code.map.result
+},
+filter: {
+input: @code.map.result,
+operation: greater_than,
+value: 10,
+output: @code.filter.result
+}
+}
+result: @code.filter.result

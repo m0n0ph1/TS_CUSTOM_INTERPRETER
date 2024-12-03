@@ -1,0 +1,18 @@
+@    data:
+{
+number: 5
+}
+@code: {
+factorial:
+{
+input: @data.number,
+operation: function,
+definition: {
+if: @input <= 1,
+then: 1,
+else: @input * factorial(@input - 1)
+},
+output: @code.factorial.result
+}
+}
+result: @code.factorial.result

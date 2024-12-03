@@ -1,11 +1,11 @@
 <?php
 // interpreter.php
     
-    require_once './values.php';
-    require_once '../frontend/ast.php';
-    require_once './environment.php';
-    require_once './statements.php';
-    require_once './expressions.php';
+    require_once 'values.php';
+    require_once 'ast.php';
+    require_once 'environment.php';
+    require_once 'statements.php';
+    require_once 'expressions.php';
     
     function evaluate($astNode, $env)
     {

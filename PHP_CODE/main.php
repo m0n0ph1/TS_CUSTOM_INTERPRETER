@@ -1,9 +1,9 @@
 <?php
 // main.php
     
-    require_once './frontend/parser.php';
-    require_once './runtime/environment.php';
-    require_once './runtime/interpreter.php';
+    require_once 'parser.php';
+    require_once 'runtime/environment.php';
+    require_once 'runtime/interpreter.php';
     
     run('./test.txt');
     

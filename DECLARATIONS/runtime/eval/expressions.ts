@@ -6,8 +6,7 @@ import {MK_NULL, NumberVal, RuntimeVal} from "../values.ts";
 function eval_numeric_binary_expr(
     lhs: NumberVal,
     rhs: NumberVal,
-    operator: string,
-): NumberVal {
+    operator: string,): NumberVal {
     let result: number;
     if (operator == "+") {
         result = lhs.value + rhs.value;
@@ -22,7 +21,10 @@ function eval_numeric_binary_expr(
         result = lhs.value % rhs.value;
     }
 
-    return {value: result, type: "number"};
+    return {
+        value: result,
+        type: "number"
+    };
 }
 
 /**
@@ -30,8 +32,7 @@ function eval_numeric_binary_expr(
  */
 export function eval_binary_expr(
     binop: BinaryExpr,
-    env: Environment,
-): RuntimeVal {
+    env: Environment,): RuntimeVal {
     const lhs = evaluate(binop.left, env);
     const rhs = evaluate(binop.right, env);
 
@@ -40,8 +41,7 @@ export function eval_binary_expr(
         return eval_numeric_binary_expr(
             lhs as NumberVal,
             rhs as NumberVal,
-            binop.operator,
-        );
+            binop.operator,);
     }
 
     // One or both are NULL
@@ -50,8 +50,7 @@ export function eval_binary_expr(
 
 export function eval_identifier(
     ident: Identifier,
-    env: Environment,
-): RuntimeVal {
+    env: Environment,): RuntimeVal {
     const val = env.lookupVar(ident.symbol);
     return val;
 }

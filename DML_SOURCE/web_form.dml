@@ -1,0 +1,28 @@
+@    data:
+{
+fields:
+[
+{name: "First Name", type: "text"},
+{name: "Age", type: "number"}
+]
+}
+@html: {
+structure:
+[
+"<form>",
+@code.generateFields,
+"<button type='submit'>Submit</button>",
+"</form>"
+]
+}
+@code: {
+generateFields: {
+input: @data.fields,
+operation: forEach,
+definition:
+[
+"<label>", @item.name, "</label>",
+"<input type='", @item.type, "' name='", @item.name, "' />"
+]
+}
+}

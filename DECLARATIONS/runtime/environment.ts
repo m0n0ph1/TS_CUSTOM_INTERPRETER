@@ -1,11 +1,12 @@
 import {RuntimeVal} from "./values.ts";
 
 export default class Environment {
-    private parent?: Environment;
-    private variables: Map<string, RuntimeVal>;
+    private parent ?: Environment;
+    private variables: Map<string,
+        RuntimeVal>;
     private constants: Set<string>;
 
-    constructor(parentENV?: Environment) {
+    constructor(parentENV ?: Environment) {
         this.parent = parentENV;
         this.variables = new Map();
         this.constants = new Set();
@@ -14,8 +15,7 @@ export default class Environment {
     public declareVar(
         varname: string,
         value: RuntimeVal,
-        constant: boolean,
-    ): RuntimeVal {
+        constant: boolean,): RuntimeVal {
         if (this.variables.has(varname)) {
             throw `Cannot declare variable ${varname}. As it already is defined.`;
         }

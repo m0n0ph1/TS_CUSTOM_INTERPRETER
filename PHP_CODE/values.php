@@ -1,8 +1,8 @@
 <?php
 // values.php
     
-    require_once './environment.php';
-    require_once '../frontend/ast.php';
+    require_once 'environment.php';
+    require_once 'ast.php';
     
     abstract class RuntimeVal
     {
